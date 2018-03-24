@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,14 +24,14 @@ public class Main {
     }
 
     private static void countUrlFrequency(String[] urlArray) throws Exception {
-        Map<String, Integer> urlFrequencyCount = new HashMap<>();
-        for (String t : urlArray) {
-            Integer i = urlFrequencyCount.get(t);
+        Map<String, Integer> urlFrequencyCount = new ConcurrentHashMap<>();
+        Arrays.stream(urlArray).forEach(item -> {
+            Integer i = urlFrequencyCount.get(item);
             if (i == null) {
                 i = 0;
             }
-            urlFrequencyCount.put(t, i + 1);
-        }
+            urlFrequencyCount.put(item, i + 1);
+        });
         System.out.println("final : " + urlArray.length);
         System.out.println("final : " + urlFrequencyCount.size());
         writeToFile(urlFrequencyCount);
